@@ -60,6 +60,7 @@
 		"@aws-sdk/util-dynamodb": "^3.883.0",
 		"@sveltejs/adapter-static": "^3.0.9",
 		"@types/node": "^24.7.2",
+		"@vercel/speed-insights": "^2.0.0",
 		"fs": "^0.0.1-security",
 		"oidc-client-ts": "^3.3.0"
 	}
