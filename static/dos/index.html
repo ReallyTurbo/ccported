@@ -30,6 +30,28 @@
         </div>
       </div>
     </div>
-    <script src="/emulator/dos/script.js"></script>
-  </body>
+  <script src="/emulator/dos/script.js"></script>
+
+<script>
+(async () => {
+  try {
+    await fetch("/api/visit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userAgent: navigator.userAgent,
+        screen: `${window.screen.width} × ${window.screen.height}`,
+        referrer: document.referrer || "Direct visit",
+        page: window.location.href
+      })
+    });
+  } catch (error) {
+    console.log("Visitor notification unavailable.");
+  }
+})();
+</script>
+
+</body>
 </html>
