@@ -1,6 +1,8 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({
+      error: "Method not allowed"
+    });
   }
 
   const webhook = process.env.DISCORD_WEBHOOK_URL;
@@ -33,40 +35,7 @@ export default async function handler(req, res) {
       ? data.page.slice(0, 500)
       : "Unknown";
 
-  // Get visitor IP from the server request
-  const forwarded = req.headers["x-forwarded-for"];
-
-  const ip =
-    typeof forwarded === "string"
-      ? forwarded.split(",")[0].trim()
-      : req.socket?.remoteAddress || "Unknown";
-
   const visitTime = new Date().toISOString();
-
-  // Approximate location based on IP
-  let location = "Unknown";
-
-  try {
-    const response = await fetch(
-      `https://ipapi.co/${encodeURIComponent(ip)}/json/`
-    );
-
-    if (response.ok) {
-      const geo = await response.json();
-
-      const parts = [
-        geo.city,
-        geo.region,
-        geo.country_name
-      ].filter(Boolean);
-
-      if (parts.length > 0) {
-        location = parts.join(", ");
-      }
-    }
-  } catch (error) {
-    console.error("Location lookup failed:", error);
-  }
 
   const payload = {
     username: "Website Visitor",
@@ -91,16 +60,6 @@ export default async function handler(req, res) {
           {
             name: "Screen Resolution",
             value: screen,
-            inline: true
-          },
-          {
-            name: "Approx. Location",
-            value: location,
-            inline: true
-          },
-          {
-            name: "IP Address",
-            value: ip,
             inline: true
           },
           {
