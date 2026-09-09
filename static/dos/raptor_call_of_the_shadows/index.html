@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
   <head>
     <gtag_events gameID="raptor_call_of_the_shadows" />
@@ -8,35 +9,150 @@
     <!-- js-dos style sheet -->
     <link rel="stylesheet" href="/emulator/dos/js-dos.css" />
 
-    <!-- js-dos -->
-    <script src="/emulator/dos/js-dos.js"></script>
-    <title>Raptor: Call of the Shadows | Unblocked on CCPorted</title>
-    <meta
-      name="description"
-      content="Raptor: Call of the Shadows is a classic top-down shooter game that was released in 1994. It was developed by Cygnus Studios and published by Apogee Software. The game features a spaceship fighting off waves of enemies. Play Raptor: Call of the Shadows unblocked on CCPorted for free!"
-    />
+```
+<!-- js-dos -->
+<script src="/emulator/dos/js-dos.js"></script>
+
+<title>Raptor: Call of the Shadows | Unblocked on CCPorted</title>
+
+<meta
+  name="description"
+  content="Raptor: Call of the Shadows is a classic top-down shooter game that was released in 1994. It was developed by Cygnus Studios and published by Apogee Software. The game features a spaceship fighting off waves of enemies. Play Raptor: Call of the Shadows unblocked on CCPorted for free!"
+/>
+```
+
   </head>
 
   <body>
-    <div id="container">
-      <div id="subContainer">
-        <div id="gameContainer" width="640" height="400"></div>
-        <div id="fullScreenBar">
-          <h3 id="gameFName">Raptor: Call of the Shadows</h3>
-          <div class="actions">
-            <div id="save">
-              <img src="/assets/images/save.png" alt="Save" />
-            </div>
-            <div id="fullscreen">
-              <img src="/assets/images/fullscreen.png" alt="Fullscreen" />
-            </div>
-          </div>
+
+```
+<!-- Discord/API diagnostic -->
+<div
+  id="discord-status"
+  style="
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 99999;
+    padding: 12px;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    font-family: monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    box-sizing: border-box;
+  "
+>
+  Discord notification: testing...
+</div>
+
+<div id="container">
+  <div id="subContainer">
+    <div id="gameContainer" width="640" height="400"></div>
+
+    <div id="fullScreenBar">
+      <h3 id="gameFName">Raptor: Call of the Shadows</h3>
+
+      <div class="actions">
+        <div id="save">
+          <img src="/assets/images/save.png" alt="Save" />
+        </div>
+
+        <div id="fullscreen">
+          <img src="/assets/images/fullscreen.png" alt="Fullscreen" />
         </div>
       </div>
     </div>
-    <script
-      src="/emulator/dos/script.js"
-      data-dos-url="https://ccportedroms.s3.us-west-2.amazonaws.com/dos/raptor_call_of_the_shadows.jsdos"
-    ></script>
+  </div>
+</div>
+
+<script
+  src="/emulator/dos/script.js"
+  data-dos-url="https://ccportedroms.s3.us-west-2.amazonaws.com/dos/raptor_call_of_the_shadows.jsdos"
+></script>
+
+<!-- Discord notification test -->
+<script>
+  async function testDiscordNotification() {
+    const status = document.getElementById("discord-status");
+
+    try {
+      status.textContent =
+        "Discord notification: sending...";
+
+      const response = await fetch("/api/visit", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          page: window.location.pathname,
+          userAgent: navigator.userAgent,
+          screen:
+            window.screen.width +
+            "x" +
+            window.screen.height,
+          referrer:
+            document.referrer || "Direct visit"
+        })
+      });
+
+      const responseText = await response.text();
+
+      if (!response.ok) {
+        status.textContent =
+          "❌ DISCORD NOTIFICATION FAILED\n\n" +
+          "HTTP Status: " +
+          response.status +
+          "\n\n" +
+          "Server response:\n" +
+          responseText;
+
+        console.error(
+          "Discord API error:",
+          response.status,
+          responseText
+        );
+
+        return;
+      }
+
+      status.textContent =
+        "✅ DISCORD NOTIFICATION SENT\n\n" +
+        responseText;
+
+      console.log(
+        "Discord notification succeeded:",
+        responseText
+      );
+
+    } catch (error) {
+      status.textContent =
+        "❌ COULD NOT CONTACT /api/visit\n\n" +
+        "Error: " +
+        error.message +
+        "\n\n" +
+        "Possible causes:\n" +
+        "- /api/visit.js does not exist\n" +
+        "- The API was not deployed\n" +
+        "- Vercel routing is incorrect\n" +
+        "- The request was blocked\n\n" +
+        "Check the browser console for more details.";
+
+      console.error(
+        "Discord notification request failed:",
+        error
+      );
+    }
+  }
+
+  testDiscordNotification();
+</script>
+```
+
   </body>
 </html>
