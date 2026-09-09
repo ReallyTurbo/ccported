@@ -1,57 +1,90 @@
+```html
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+
     <link rel="stylesheet" href="/emulator/dos/styles.css" />
+
     <!-- js-dos style sheet -->
     <link rel="stylesheet" href="/emulator/dos/js-dos.css" />
 
     <!-- js-dos -->
     <script src="/emulator/dos/js-dos.js"></script>
+
     <title>DOS Loader | Unblocked on CCPorted</title>
-    <meta name = "robots" content = "noindex, nofollow" />
+
+    <meta name="robots" content="noindex, nofollow" />
   </head>
 
   <body>
     <div id="container">
       <div id="subContainer">
+
         <div id="gameContainer" width="640" height="400"></div>
+
         <div id="fullScreenBar">
           <h3 id="gameFName">DOS Loader</h3>
+
           <div class="actions">
             <div id="save">
               <img src="/assets/images/save.png" alt="Save" />
             </div>
+
             <div id="fullscreen">
               <img src="/assets/images/fullscreen.png" alt="Fullscreen" />
             </div>
           </div>
         </div>
+
       </div>
     </div>
-  <script src="/emulator/dos/script.js"></script>
 
-<script>
-(async () => {
-  try {
-    await fetch("/api/visit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        userAgent: navigator.userAgent,
-        screen: `${window.screen.width} × ${window.screen.height}`,
-        referrer: document.referrer || "Direct visit",
-        page: window.location.href
-      })
-    });
-  } catch (error) {
-    console.log("Visitor notification unavailable.");
-  }
-})();
-</script>
+    <script src="/emulator/dos/script.js"></script>
 
-</body>
+    <!-- Discord visitor notification -->
+    <script>
+      window.addEventListener("load", async () => {
+        console.log("🔵 Page loaded — starting visitor notification...");
+
+        try {
+          const response = await fetch("/api/visit", {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              userAgent: navigator.userAgent,
+              screen: `${window.screen.width} × ${window.screen.height}`,
+              referrer: document.referrer || "Direct visit",
+              page: window.location.href
+            })
+          });
+
+          const responseText = await response.text();
+
+          console.log("📥 /api/visit status:", response.status);
+          console.log("📥 /api/visit response:", responseText);
+
+          if (response.ok) {
+            console.log("✅ Discord visitor notification sent!");
+          } else {
+            console.error(
+              "❌ Discord visitor notification failed!",
+              response.status,
+              responseText
+            );
+          }
+
+        } catch (error) {
+          console.error("❌ Could not contact /api/visit:", error);
+        }
+      });
+    </script>
+
+  </body>
 </html>
+```
