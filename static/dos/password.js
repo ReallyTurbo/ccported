@@ -1,21 +1,21 @@
 // Generate a random 3-digit number
 const randomNumber = Math.floor(Math.random() * 900) + 100;
 
-// Create the password
-const password = `SchoolSucks${randomNumber}`;
+// Create password
+const password = "SchoolSucks" + randomNumber;
 
-// Print the password to the browser console
-console.log(`Password = ${password}`);
+// Show password in browser console
+console.log("Password = " + password);
 
-// Get elements
-const input = document.getElementById("passwordInput");
-const button = document.getElementById("confirmButton");
-const error = document.getElementById("error");
+// Get HTML elements
+const passwordInput = document.getElementById("passwordInput");
+const confirmButton = document.getElementById("confirmButton");
+const errorMessage = document.getElementById("error");
 
 // Check password
 function checkPassword() {
 
-  const enteredPassword = input.value;
+  const enteredPassword = passwordInput.value;
 
   if (enteredPassword === password) {
 
@@ -27,19 +27,19 @@ function checkPassword() {
 
   } else {
 
-    error.textContent = "Incorrect password.";
+    errorMessage.textContent = "Incorrect password.";
 
-    input.value = "";
-    input.focus();
+    passwordInput.value = "";
 
+    passwordInput.focus();
   }
 }
 
-// Button
-button.addEventListener("click", checkPassword);
+// Confirm button
+confirmButton.addEventListener("click", checkPassword);
 
-// Enter key
-input.addEventListener("keydown", function(event) {
+// Allow Enter key
+passwordInput.addEventListener("keydown", function(event) {
 
   if (event.key === "Enter") {
     checkPassword();
