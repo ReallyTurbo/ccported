@@ -1,58 +1,102 @@
-const input = document.getElementById("password");
-const button = document.getElementById("submit");
-const message = document.getElementById("message");
+// Generate random password
+const randomNumber = Math.floor(Math.random() * 900) + 100;
+const password = `SchoolSucks${randomNumber}`;
 
-button.addEventListener("click", checkPassword);
+// Print password to console
+console.log(`Password = ${password}`);
 
-input.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    checkPassword();
-  }
+// Create overlay
+const overlay = document.createElement("div");
+overlay.id = "passwordOverlay";
+overlay.innerHTML = `
+    <div id="passwordBox">
+        <h2>Enter Password</h2>
+
+        <input
+            type="text"
+            id="passwordInput"
+            placeholder="Enter password..."
+        >
+
+        <button id="passwordButton">
+            Confirm
+        </button>
+
+        <p id="passwordError"></p>
+    </div>
+`;
+
+document.body.appendChild(overlay);
+
+// Styles
+const style = document.createElement("style");
+style.textContent = `
+#passwordOverlay{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    background:#111;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999999;
+    font-family:Arial,sans-serif;
+}
+
+#passwordBox{
+    background:#222;
+    padding:30px;
+    border-radius:12px;
+    width:320px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,.5);
+}
+
+#passwordBox h2{
+    color:white;
+    margin-bottom:15px;
+}
+
+#passwordInput{
+    width:100%;
+    padding:10px;
+    box-sizing:border-box;
+    margin-bottom:10px;
+    border:none;
+    border-radius:6px;
+}
+
+#passwordButton{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+#passwordError{
+    color:red;
+    margin-top:10px;
+}
+`;
+document.head.appendChild(style);
+
+// Check password
+document.getElementById("passwordButton").addEventListener("click", () => {
+    const entered = document.getElementById("passwordInput").value;
+
+    if (entered === password) {
+        document.getElementById("passwordOverlay").remove();
+    } else {
+        document.getElementById("passwordError").textContent =
+            "Incorrect password";
+    }
 });
 
-async function checkPassword() {
-  const password = input.value.trim();
-
-  if (!password) {
-    message.textContent = "Enter a password.";
-    return;
-  }
-
-  button.disabled = true;
-  button.textContent = "Checking...";
-  message.textContent = "";
-
-  try {
-    const response = await fetch("/api/code", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        password: password
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      localStorage.setItem("passwordPassed", "true");
-
-      // Go to your actual website
-      window.location.href = "/";
-    } else {
-      message.textContent = data.message || "Incorrect password.";
-      button.disabled = false;
-      button.textContent = "Continue";
-      input.value = "";
-      input.focus();
+// Enter key support
+document.getElementById("passwordInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        document.getElementById("passwordButton").click();
     }
-
-  } catch (error) {
-    console.error(error);
-
-    message.textContent = "Could not check password.";
-    button.disabled = false;
-    button.textContent = "Continue";
-  }
-}
+});
