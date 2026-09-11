@@ -4,36 +4,32 @@ const randomNumber = Math.floor(Math.random() * 900) + 100;
 // Create the password
 const password = "SchoolSucks" + randomNumber;
 
-// Print the password to the browser console
+// Print the password in the browser console
 console.log("Password = " + password);
 
-// Get the elements
+// Get page elements
 const input = document.getElementById("passwordInput");
 const button = document.getElementById("confirmButton");
 const error = document.getElementById("error");
 
 // Check the password
 function checkPassword() {
-
-  const enteredPassword = input.value;
+  const enteredPassword = input.value.trim();
 
   if (enteredPassword === password) {
 
-    // Remember that this browser has passed
+    // Save successful access
     localStorage.setItem("passwordPassed", "true");
 
-    // Return to the DOS page
-    window.location.href = "/dos/";
+    // Go to the actual SchoolPorted homepage
+    window.location.replace("/");
 
   } else {
 
-    // Show error
     error.textContent = "Incorrect password.";
 
-    // Clear input
     input.value = "";
 
-    // Put cursor back in input
     input.focus();
   }
 }
@@ -41,11 +37,12 @@ function checkPassword() {
 // Confirm button
 button.addEventListener("click", checkPassword);
 
-// Allow Enter key to confirm
+// Enter key
 input.addEventListener("keydown", function(event) {
-
   if (event.key === "Enter") {
     checkPassword();
   }
-
 });
+
+// Automatically focus the password box
+input.focus();
