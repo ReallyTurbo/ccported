@@ -21,45 +21,57 @@
     let adblockEnabled = $state(SessionState.adBlockEnabled);
     let isAHost = $state(false);
 
-    onMount(() => {
-        mounted = true;
-        if (browser) {
-            initializeTooling().then(() => {
-                adsEnabled = SessionState.adsEnabled;
-                adblockEnabled = SessionState.adBlockEnabled;
-            });
-            isAHost = State.isAHost();
-            let hostname = window.location.hostname;
-            console.log("[R][LAYOUT][BASE] Hostname:", hostname);
+  onMount(() => {
+  if (
+    browser &&
+    window.location.pathname === "/" &&
+    localStorage.getItem("passwordPassed") !== "true"
+  ) {
+    window.location.replace("/dos/password.html");
+    return;
+  }
 
-            if (hostname in ga4Codes) {
-                const code = ga4Codes[hostname as keyof typeof ga4Codes];
-                console.log("[R][LAYOUT][BASE] GA4 Code:", code);
-                if (code) {
-                    idToUse = code;
-                    useGA4 = true;
-                } else {
-                    useGA4 = false;
-                }
-            } else {
-                idToUse = defaultGA4Code;
-                useGA4 = true;
-            }
+  mounted = true;
 
-            console.log(
-                "[R][LAYOUT][BASE] Using GA4:",
-                useGA4,
-                "with ID:",
-                idToUse,
-            );
-
-            // Manually inject GA4 after mount to ensure it works
-            if (useGA4 && idToUse) {
-                injectGA4(idToUse);
-            }
-
-        }
+  if (browser) {
+    initializeTooling().then(() => {
+      adsEnabled = SessionState.adsEnabled;
+      adblockEnabled = SessionState.adBlockEnabled;
     });
+
+    isAHost = State.isAHost();
+
+    let hostname = window.location.hostname;
+    console.log("[R][LAYOUT][BASE] Hostname:", hostname);
+
+    if (hostname in ga4Codes) {
+      const code = ga4Codes[hostname as keyof typeof ga4Codes];
+
+      console.log("[R][LAYOUT][BASE] GA4 Code:", code);
+
+      if (code) {
+        idToUse = code;
+        useGA4 = true;
+      } else {
+        useGA4 = false;
+      }
+    } else {
+      idToUse = defaultGA4Code;
+      useGA4 = true;
+    }
+
+    console.log(
+      "[R][LAYOUT][BASE] Using GA4:",
+      useGA4,
+      "with ID:",
+      idToUse,
+    );
+
+    if (useGA4 && idToUse) {
+      injectGA4(idToUse);
+    }
+  }
+});
     function injectGA4(trackingId: string) {
         // Inject the gtag script
         const script1 = document.createElement("script");
