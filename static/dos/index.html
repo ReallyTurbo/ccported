@@ -5,26 +5,226 @@
     <meta name="viewport" content="width=device-width" />
 
     <link rel="stylesheet" href="/emulator/dos/styles.css" />
-
-    <!-- js-dos style sheet -->
     <link rel="stylesheet" href="/emulator/dos/js-dos.css" />
-
-    <!-- js-dos -->
     <script src="/emulator/dos/js-dos.js"></script>
 
     <title>DOS Loader | Unblocked on CCPorted</title>
-
     <meta name="robots" content="noindex, nofollow" />
 
-    <!-- Password protection -->
-    <script>
-      if (localStorage.getItem("passwordPassed") !== "true") {
-        window.location.replace("/dos/password.html");
+    <style>
+      #schoolLoadingScreen {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f7f8fa;
+        opacity: 1;
+        visibility: visible;
+        transition:
+          opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+          visibility 0.7s;
       }
+
+      #schoolLoadingScreen.hide {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .loadingContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        animation: loadingAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .loadingLogo {
+        width: 72px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+        background: #fff;
+        color: #17181c;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        border: 1px solid #e5e7eb;
+        box-shadow:
+          0 15px 45px rgba(0, 0, 0, 0.08),
+          0 3px 10px rgba(0, 0, 0, 0.04);
+        animation:
+          logoFloat 2.4s ease-in-out infinite,
+          logoGlow 2.4s ease-in-out infinite;
+      }
+
+      .loadingTitle {
+        margin-top: 22px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.4px;
+        color: #17181c;
+      }
+
+      .loadingSubtitle {
+        margin-top: 7px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+        color: #8a8e96;
+      }
+
+      .loadingBar {
+        width: 150px;
+        height: 3px;
+        margin-top: 25px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #e8e9ec;
+      }
+
+      .loadingBarInner {
+        width: 45%;
+        height: 100%;
+        border-radius: inherit;
+        background: #17181c;
+        animation: loadingProgress 1.25s ease-in-out infinite;
+      }
+
+      .loadingFooter {
+        position: absolute;
+        bottom: 28px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        color: #b0b3b9;
+        letter-spacing: 0.2px;
+      }
+
+      @keyframes loadingAppear {
+        from {
+          opacity: 0;
+          transform: translateY(12px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes logoFloat {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      @keyframes logoGlow {
+        0%, 100% {
+          box-shadow:
+            0 15px 45px rgba(0, 0, 0, 0.08),
+            0 3px 10px rgba(0, 0, 0, 0.04);
+        }
+        50% {
+          box-shadow:
+            0 20px 55px rgba(0, 0, 0, 0.11),
+            0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+      }
+
+      @keyframes loadingProgress {
+        0% {
+          transform: translateX(-130%);
+        }
+        50% {
+          transform: translateX(100%);
+        }
+        100% {
+          transform: translateX(300%);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .loadingLogo {
+          width: 64px;
+          height: 64px;
+          border-radius: 18px;
+          font-size: 28px;
+        }
+
+        .loadingTitle {
+          font-size: 20px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #schoolLoadingScreen,
+        .loadingContent,
+        .loadingLogo,
+        .loadingBarInner {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+
+    <script>
+      (function () {
+        const passwordPassed =
+          localStorage.getItem("passwordPassed") === "true";
+
+        window.addEventListener("DOMContentLoaded", function () {
+          const loadingScreen =
+            document.getElementById("schoolLoadingScreen");
+
+          setTimeout(function () {
+            loadingScreen.classList.add("hide");
+
+            setTimeout(function () {
+              if (!passwordPassed) {
+                window.location.replace("/dos/password.html");
+              }
+            }, 700);
+          }, 1200);
+        });
+      })();
     </script>
   </head>
 
   <body>
+
+    <div id="schoolLoadingScreen">
+
+      <div class="loadingContent">
+
+        <div class="loadingLogo">
+          S
+        </div>
+
+        <div class="loadingTitle">
+          SchoolPorted
+        </div>
+
+        <div class="loadingSubtitle">
+          Loading your experience
+        </div>
+
+        <div class="loadingBar">
+          <div class="loadingBarInner"></div>
+        </div>
+
+      </div>
+
+      <div class="loadingFooter">
+        SchoolPorted
+      </div>
+
+    </div>
 
     <div id="container">
       <div id="subContainer">
