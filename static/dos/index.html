@@ -1,256 +1,300 @@
+```html
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
 
-    <link rel="stylesheet" href="/emulator/dos/styles.css" />
-    <link rel="stylesheet" href="/emulator/dos/js-dos.css" />
-    <script src="/emulator/dos/js-dos.js"></script>
+  <title>DOS Loader | Unblocked on CCPorted</title>
 
-    <title>DOS Loader | Unblocked on CCPorted</title>
-    <meta name="robots" content="noindex, nofollow" />
+  <meta name="robots" content="noindex, nofollow">
 
-    <style>
-      #schoolLoadingScreen {
-        position: fixed;
-        inset: 0;
-        z-index: 999999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f7f8fa;
-        opacity: 1;
-        visibility: visible;
-        transition:
-          opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-          visibility 0.7s;
-      }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-      #schoolLoadingScreen.hide {
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* LOADING SCREEN */
+
+    #loadingScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #f7f8fa;
+
+      opacity: 1;
+
+      transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+    }
+
+    #loadingScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loadingContent {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      animation: appear 0.8s ease forwards;
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 20px;
+
+      background: white;
+      color: #17181c;
+
+      font-size: 32px;
+      font-weight: 700;
+
+      border: 1px solid #e5e7eb;
+
+      box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.08),
+        0 4px 12px rgba(0, 0, 0, 0.04);
+
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .title {
+      margin-top: 20px;
+
+      color: #17181c;
+
+      font-size: 22px;
+      font-weight: 700;
+
+      letter-spacing: -0.4px;
+    }
+
+    .subtitle {
+      margin-top: 7px;
+
+      color: #8a8e96;
+
+      font-size: 13px;
+    }
+
+    .loader {
+      width: 150px;
+      height: 3px;
+
+      margin-top: 25px;
+
+      overflow: hidden;
+
+      border-radius: 999px;
+
+      background: #e6e7ea;
+    }
+
+    .loaderBar {
+      width: 45%;
+      height: 100%;
+
+      border-radius: 999px;
+
+      background: #17181c;
+
+      animation: loading 1.2s ease-in-out infinite;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 28px;
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      font-size: 11px;
+
+      color: #b0b3b9;
+    }
+
+    @keyframes appear {
+      from {
         opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
+        transform: translateY(12px) scale(0.97);
       }
 
-      .loadingContent {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        animation: loadingAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0);
       }
 
-      .loadingLogo {
-        width: 72px;
-        height: 72px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 20px;
-        background: #fff;
-        color: #17181c;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 32px;
-        font-weight: 700;
-        border: 1px solid #e5e7eb;
-        box-shadow:
-          0 15px 45px rgba(0, 0, 0, 0.08),
-          0 3px 10px rgba(0, 0, 0, 0.04);
-        animation:
-          logoFloat 2.4s ease-in-out infinite,
-          logoGlow 2.4s ease-in-out infinite;
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @keyframes loading {
+      0% {
+        transform: translateX(-140%);
       }
 
-      .loadingTitle {
-        margin-top: 22px;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 22px;
-        font-weight: 700;
-        letter-spacing: -0.4px;
-        color: #17181c;
+      50% {
+        transform: translateX(100%);
       }
 
-      .loadingSubtitle {
-        margin-top: 7px;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 13px;
-        color: #8a8e96;
+      100% {
+        transform: translateX(320%);
       }
+    }
+  </style>
 
-      .loadingBar {
-        width: 150px;
-        height: 3px;
-        margin-top: 25px;
-        overflow: hidden;
-        border-radius: 999px;
-        background: #e8e9ec;
-      }
+  <!-- Show loading screen immediately -->
+  <script>
+    document.documentElement.style.background = "#f7f8fa";
+  </script>
 
-      .loadingBarInner {
-        width: 45%;
-        height: 100%;
-        border-radius: inherit;
-        background: #17181c;
-        animation: loadingProgress 1.25s ease-in-out infinite;
-      }
+</head>
 
-      .loadingFooter {
-        position: absolute;
-        bottom: 28px;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
-        color: #b0b3b9;
-        letter-spacing: 0.2px;
-      }
+<body>
 
-      @keyframes loadingAppear {
-        from {
-          opacity: 0;
-          transform: translateY(12px) scale(0.98);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
+  <!-- LOADING SCREEN -->
+  <div id="loadingScreen">
 
-      @keyframes logoFloat {
-        0%, 100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-5px);
-        }
-      }
+    <div class="loadingContent">
 
-      @keyframes logoGlow {
-        0%, 100% {
-          box-shadow:
-            0 15px 45px rgba(0, 0, 0, 0.08),
-            0 3px 10px rgba(0, 0, 0, 0.04);
-        }
-        50% {
-          box-shadow:
-            0 20px 55px rgba(0, 0, 0, 0.11),
-            0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-      }
+      <div class="logo">S</div>
 
-      @keyframes loadingProgress {
-        0% {
-          transform: translateX(-130%);
-        }
-        50% {
-          transform: translateX(100%);
-        }
-        100% {
-          transform: translateX(300%);
-        }
-      }
-
-      @media (max-width: 480px) {
-        .loadingLogo {
-          width: 64px;
-          height: 64px;
-          border-radius: 18px;
-          font-size: 28px;
-        }
-
-        .loadingTitle {
-          font-size: 20px;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        #schoolLoadingScreen,
-        .loadingContent,
-        .loadingLogo,
-        .loadingBarInner {
-          animation: none !important;
-          transition: none !important;
-        }
-      }
-    </style>
-
-    <script>
-      (function () {
-        const passwordPassed =
-          localStorage.getItem("passwordPassed") === "true";
-
-        window.addEventListener("DOMContentLoaded", function () {
-          const loadingScreen =
-            document.getElementById("schoolLoadingScreen");
-
-          setTimeout(function () {
-            loadingScreen.classList.add("hide");
-
-            setTimeout(function () {
-              if (!passwordPassed) {
-                window.location.replace("/dos/password.html");
-              }
-            }, 700);
-          }, 1200);
-        });
-      })();
-    </script>
-  </head>
-
-  <body>
-
-    <div id="schoolLoadingScreen">
-
-      <div class="loadingContent">
-
-        <div class="loadingLogo">
-          S
-        </div>
-
-        <div class="loadingTitle">
-          SchoolPorted
-        </div>
-
-        <div class="loadingSubtitle">
-          Loading your experience
-        </div>
-
-        <div class="loadingBar">
-          <div class="loadingBarInner"></div>
-        </div>
-
-      </div>
-
-      <div class="loadingFooter">
+      <div class="title">
         SchoolPorted
       </div>
 
+      <div class="subtitle">
+        Loading your experience
+      </div>
+
+      <div class="loader">
+        <div class="loaderBar"></div>
+      </div>
+
     </div>
 
-    <div id="container">
-      <div id="subContainer">
+    <div class="footer">
+      SchoolPorted
+    </div>
 
-        <div id="gameContainer" width="640" height="400"></div>
+  </div>
 
-        <div id="fullScreenBar">
-          <h3 id="gameFName">DOS Loader</h3>
 
-          <div class="actions">
+  <!-- MAIN WEBSITE -->
 
-            <div id="save">
-              <img src="/assets/images/save.png" alt="Save" />
-            </div>
+  <link rel="stylesheet" href="/emulator/dos/styles.css">
+  <link rel="stylesheet" href="/emulator/dos/js-dos.css">
 
-            <div id="fullscreen">
-              <img src="/assets/images/fullscreen.png" alt="Fullscreen" />
-            </div>
+  <script src="/emulator/dos/js-dos.js"></script>
 
+
+  <div id="container">
+
+    <div id="subContainer">
+
+      <div
+        id="gameContainer"
+        width="640"
+        height="400">
+      </div>
+
+      <div id="fullScreenBar">
+
+        <h3 id="gameFName">
+          DOS Loader
+        </h3>
+
+        <div class="actions">
+
+          <div id="save">
+            <img
+              src="/assets/images/save.png"
+              alt="Save">
           </div>
+
+          <div id="fullscreen">
+            <img
+              src="/assets/images/fullscreen.png"
+              alt="Fullscreen">
+          </div>
+
         </div>
 
       </div>
+
     </div>
 
-    <script src="/emulator/dos/script.js"></script>
+  </div>
 
-  </body>
+
+  <script src="/emulator/dos/script.js"></script>
+
+
+  <!-- PASSWORD CHECK + LOADING FINISH -->
+
+  <script>
+    const loadingScreen =
+      document.getElementById("loadingScreen");
+
+    const passwordPassed =
+      localStorage.getItem("passwordPassed") === "true";
+
+
+    /*
+     * Keep the loading screen visible long enough
+     * for the animation to actually be seen.
+     */
+    setTimeout(() => {
+
+      loadingScreen.classList.add("hidden");
+
+
+      /*
+       * Wait for the fade-out to finish,
+       * then redirect if necessary.
+       */
+      setTimeout(() => {
+
+        if (!passwordPassed) {
+          window.location.replace("/dos/password.html");
+        }
+
+      }, 800);
+
+    }, 1800);
+  </script>
+
+</body>
 </html>
+```
