@@ -15,16 +15,16 @@
     <title>DOS Loader | Unblocked on CCPorted</title>
 
     <meta name="robots" content="noindex, nofollow" />
-  </head>
-
-  <body>
 
     <!-- Password protection -->
     <script>
       if (localStorage.getItem("passwordPassed") !== "true") {
-        window.location.replace("/password.html");
+        window.location.href = "/password.html";
       }
     </script>
+  </head>
+
+  <body>
 
     <div id="container">
       <div id="subContainer">
@@ -35,6 +35,7 @@
           <h3 id="gameFName">DOS Loader</h3>
 
           <div class="actions">
+
             <div id="save">
               <img src="/assets/images/save.png" alt="Save" />
             </div>
@@ -42,6 +43,7 @@
             <div id="fullscreen">
               <img src="/assets/images/fullscreen.png" alt="Fullscreen" />
             </div>
+
           </div>
         </div>
 
@@ -49,48 +51,6 @@
     </div>
 
     <script src="/emulator/dos/script.js"></script>
-
-    <!-- Discord visitor notification -->
-    <script>
-      window.addEventListener("load", async () => {
-        console.log("🔵 Page loaded — starting visitor notification...");
-
-        try {
-          const response = await fetch("/api/visit", {
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-              userAgent: navigator.userAgent,
-              screen: `${window.screen.width} × ${window.screen.height}`,
-              referrer: document.referrer || "Direct visit",
-              page: window.location.href
-            })
-          });
-
-          const responseText = await response.text();
-
-          console.log("📥 /api/visit status:", response.status);
-          console.log("📥 /api/visit response:", responseText);
-
-          if (response.ok) {
-            console.log("✅ Discord visitor notification sent!");
-          } else {
-            console.error(
-              "❌ Discord visitor notification failed!",
-              response.status,
-              responseText
-            );
-          }
-
-        } catch (error) {
-          console.error("❌ Could not contact /api/visit:", error);
-        }
-      });
-    </script>
 
   </body>
 </html>
