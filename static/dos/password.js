@@ -1,45 +1,48 @@
 // Generate a random 3-digit number
 const randomNumber = Math.floor(Math.random() * 900) + 100;
 
-// Create password
+// Create the password
 const password = "SchoolSucks" + randomNumber;
 
-// Show password in browser console
+// Print the password to the browser console
 console.log("Password = " + password);
 
-// Get HTML elements
-const passwordInput = document.getElementById("passwordInput");
-const confirmButton = document.getElementById("confirmButton");
-const errorMessage = document.getElementById("error");
+// Get the elements
+const input = document.getElementById("passwordInput");
+const button = document.getElementById("confirmButton");
+const error = document.getElementById("error");
 
-// Check password
+// Check the password
 function checkPassword() {
 
-  const enteredPassword = passwordInput.value;
+  const enteredPassword = input.value;
 
   if (enteredPassword === password) {
 
-    // Remember that this visitor passed
+    // Remember that this browser has passed
     localStorage.setItem("passwordPassed", "true");
 
-    // Go to the main site
-    window.location.href = "/";
+    // Return to the DOS page
+    window.location.href = "/dos/";
 
   } else {
 
-    errorMessage.textContent = "Incorrect password.";
+    // Show error
+    error.textContent = "Incorrect password.";
 
-    passwordInput.value = "";
+    // Clear input
+    input.value = "";
 
-    passwordInput.focus();
+    // Put cursor back in input
+    input.focus();
   }
 }
 
 // Confirm button
-confirmButton.addEventListener("click", checkPassword);
+button.addEventListener("click", checkPassword);
 
-// Allow Enter key
-passwordInput.addEventListener("keydown", function(event) {
+// Allow Enter key to confirm
+input.addEventListener("keydown", function(event) {
 
   if (event.key === "Enter") {
     checkPassword();
