@@ -291,4 +291,13 @@
   </script>
 
 </body>
+  ```html
+<script>
+  // Require visitors to enter through the site's launcher.
+  if (sessionStorage.getItem("schoolPortedLaunched") !== "true") {
+    window.location.replace("/cloak.html");
+  }
+</script>
+```
+
 </html>
